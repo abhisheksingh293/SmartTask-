@@ -1,12 +1,14 @@
 import { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 
 const RegisterPage = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { register, user } = useContext(AuthContext); // Assuming register function and user state
+    const { register, user } = useContext(AuthContext);
+    const { addToast } = useToast();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -19,10 +21,10 @@ const RegisterPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await register(name, email, password);
-            // redirection handled by useEffect
+            await register({ name, email, password });
+            addToast('Registration successful', 'success');
         } catch (error) {
-            alert('Registration failed');
+            addToast(error.response?.data?.message || 'Registration failed', 'error');
         }
     };
 

@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import { Plus, Filter } from 'lucide-react';
 import TaskForm from '../components/TaskForm';
 import TaskItem from '../components/TaskItem';
@@ -8,6 +9,7 @@ import taskService from '../services/taskService';
 
 const Dashboard = () => {
     const { user, loading } = useContext(AuthContext);
+    const { addToast } = useToast();
     const navigate = useNavigate();
     const [tasks, setTasks] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,15 +43,17 @@ const Dashboard = () => {
                 // Update
                 const data = await taskService.updateTask(editingTask._id, taskData);
                 setTasks(tasks.map(t => t._id === data._id ? data : t));
+                addToast('Task updated successfully', 'success');
             } else {
                 // Create
                 const data = await taskService.createTask(taskData);
                 setTasks([...tasks, data]);
+                addToast('Task created successfully', 'success');
             }
             setEditingTask(null);
         } catch (error) {
             console.error("Error saving task", error);
-            alert("Failed to save task");
+            addToast('Failed to save task', 'error');
         }
     };
 
@@ -58,8 +62,10 @@ const Dashboard = () => {
             try {
                 await taskService.deleteTask(id);
                 setTasks(tasks.filter((task) => task._id !== id));
+                addToast('Task deleted', 'info');
             } catch (error) {
                 console.error("Error deleting task", error);
+                addToast('Failed to delete task', 'error');
             }
         }
     };

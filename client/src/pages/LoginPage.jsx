@@ -1,11 +1,13 @@
 import { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { login, user, loading } = useContext(AuthContext); // Assuming user state is available to redirect if already logged in
+    const { login, user, loading } = useContext(AuthContext);
+    const { addToast } = useToast();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,10 +19,10 @@ const LoginPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await login(email, password);
-            // redirection handled by useEffect
+            await login({ email, password });
+            addToast('Welcome back!', 'success');
         } catch (error) {
-            alert('Login failed');
+            addToast(error.response?.data?.message || 'Login failed', 'error');
         }
     };
 
