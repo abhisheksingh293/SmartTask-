@@ -9,7 +9,7 @@ const generateToken = (id) => {
 };
 
 exports.registerUser = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { name, email, password } = req.body;
 
     try {
         const userExists = await User.findOne({ email });
@@ -21,7 +21,7 @@ exports.registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const user = await User.create({
-            username,
+            name,
             email,
             password: hashedPassword,
         });
@@ -29,7 +29,7 @@ exports.registerUser = async (req, res) => {
         if (user) {
             res.status(201).json({
                 _id: user._id,
-                username: user.username,
+                name: user.name,
                 email: user.email,
                 token: generateToken(user._id),
             });
@@ -50,7 +50,7 @@ exports.loginUser = async (req, res) => {
         if (user && (await bcrypt.compare(password, user.password))) {
             res.json({
                 _id: user._id,
-                username: user.username,
+                name: user.name,
                 email: user.email,
                 token: generateToken(user._id),
             });

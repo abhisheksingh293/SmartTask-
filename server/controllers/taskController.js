@@ -10,7 +10,7 @@ exports.getTasks = async (req, res) => {
 };
 
 exports.createTask = async (req, res) => {
-    const { title, description, status } = req.body;
+    const { title, description, status, dueDate } = req.body;
 
     if (!title) {
         return res.status(400).json({ message: 'Please add a task title' });
@@ -21,6 +21,7 @@ exports.createTask = async (req, res) => {
             title,
             description,
             status,
+            dueDate,
             user: req.user._id,
         });
         res.status(201).json(task);

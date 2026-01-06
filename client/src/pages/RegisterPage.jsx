@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 
 const RegisterPage = () => {
-    const [username, setUsername] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { register, user } = useContext(AuthContext); // Assuming register function and user state
@@ -19,7 +19,7 @@ const RegisterPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await register(username, email, password);
+            await register(name, email, password);
             // redirection handled by useEffect
         } catch (error) {
             alert('Registration failed');
@@ -32,13 +32,13 @@ const RegisterPage = () => {
                 <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Create Account</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-gray-700 mb-2">Username</label>
+                        <label className="block text-gray-700 mb-2">Name</label>
                         <input
                             type="text"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Choose a username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             required
                         />
                     </div>
