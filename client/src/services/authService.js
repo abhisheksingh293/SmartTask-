@@ -1,11 +1,11 @@
-import axios from 'axios';
+import api from './api';
 
 // Use environment variable for API URL or fallback to relative path (proxy)
-const API_URL = `${import.meta.env.VITE_API_URL || ''}/api/auth`;
+// const API_URL = `${import.meta.env.VITE_API_URL || ''}/api/auth`;
 
 // Register user
 const register = async (userData) => {
-    const response = await axios.post(`${API_URL}/register`, userData);
+    const response = await api.post('/auth/register', userData);
 
     if (response.data) {
         localStorage.setItem('userInfo', JSON.stringify(response.data));
@@ -16,7 +16,7 @@ const register = async (userData) => {
 
 // Login user
 const login = async (userData) => {
-    const response = await axios.post(`${API_URL}/login`, userData);
+    const response = await api.post('/auth/login', userData);
 
     if (response.data) {
         localStorage.setItem('userInfo', JSON.stringify(response.data));

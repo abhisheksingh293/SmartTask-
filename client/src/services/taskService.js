@@ -1,35 +1,22 @@
-import axios from 'axios';
-
-// Use environment variable for API URL or fallback to relative path (proxy)
-const API_URL = `${import.meta.env.VITE_API_URL || ''}/api/tasks`;
-
-// Get user token from local storage
-const getAuthHeader = () => {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    return userInfo && userInfo.token ? { Authorization: `Bearer ${userInfo.token}` } : {};
-};
+import api from './api';
 
 const getTasks = async () => {
-    const config = { headers: getAuthHeader() };
-    const response = await axios.get(API_URL, config);
+    const response = await api.get('/tasks');
     return response.data;
 };
 
 const createTask = async (taskData) => {
-    const config = { headers: getAuthHeader() };
-    const response = await axios.post(API_URL, taskData, config);
+    const response = await api.post('/tasks', taskData);
     return response.data;
 };
 
 const updateTask = async (taskId, taskData) => {
-    const config = { headers: getAuthHeader() };
-    const response = await axios.put(`${API_URL}/${taskId}`, taskData, config);
+    const response = await api.put(`/tasks/${taskId}`, taskData);
     return response.data;
 };
 
 const deleteTask = async (taskId) => {
-    const config = { headers: getAuthHeader() };
-    const response = await axios.delete(`${API_URL}/${taskId}`, config);
+    const response = await api.delete(`/tasks/${taskId}`);
     return response.data;
 };
 
